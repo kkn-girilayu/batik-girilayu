@@ -10,7 +10,7 @@ export default function BeritaPage({ newsData }) {
 
   return (
     <>
-      {newsData ? (
+      {news.title ? (
         <>
           <Head>
             <title>{news?.title} - Batik Girilayu</title>
@@ -32,7 +32,7 @@ export default function BeritaPage({ newsData }) {
             <Image src={news?.imgUrl} mb="6" maxW={{ base: 'full', md: 'lg' }} mx="auto" alt="" />
 
             <VStack maxW={{ base: 'full', md: '70%' }} marginX="auto" alignItems="start" spacing="4">
-              {displayContentBlocks(news?.blocks)}
+              {displayContentBlocks(news?.blocks || [])}
             </VStack>
           </Container>
         </>
@@ -63,8 +63,12 @@ export async function getServerSideProps(context) {
   colRef = colRef.where('slug', '==', slug);
   colRef = colRef.where('isPublished', '==', true);
 
+  let newsData = [];
   const fetch = await colRef.get();
-  const newsData = fetch.docs.map((doc) => doc.data());
+
+  if (fetch.docs.length) {
+    newsData = fetch.docs.map((doc) => doc.data());
+  }
 
   return {
     props: { newsData },

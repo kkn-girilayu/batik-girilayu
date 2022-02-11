@@ -9,7 +9,7 @@ export default function Home() {
   const [news, setNews] = useState([]);
 
   useEffect(() => {
-    const colRef = firestore.collection('berita').orderBy('publishTime', 'desc');
+    let colRef = firestore.collection('berita').orderBy('publishTime', 'desc').where('isPublished', '==', true);
 
     colRef.get().then((snapshot) => {
       const _news = [];
