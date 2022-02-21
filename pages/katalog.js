@@ -10,7 +10,7 @@ export default function KatalogPage() {
   const [catalogues, setCatalogues] = useState([]);
 
   useEffect(() => {
-    const colRef = firestore.collection('katalog').orderBy('tanggal', 'desc');
+    const colRef = firestore.collection('katalog').orderBy('id', 'desc').where('isPublished', '==', true);
 
     colRef.get().then((snapshot) => {
       const _news = [];
@@ -53,12 +53,12 @@ export default function KatalogPage() {
                   <CatalogueItem
                     key={idx * -100}
                     path={catalogue.slug}
-                    title={catalogue.judul}
-                    fullPrice={catalogue.hargaPenuh}
-                    price={catalogue.harga}
-                    thumbnail={catalogue.gambar[0].thumbnail}
+                    title={catalogue.title}
+                    normalPrice={catalogue.normalPrice}
+                    discountPrice={catalogue.discountPrice}
+                    thumbnail={catalogue.images[0].thumbnail}
                   >
-                    {catalogue.intisari}
+                    {catalogue.excerpt}
                   </CatalogueItem>
                 ))
               ) : (

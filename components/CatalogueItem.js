@@ -6,11 +6,11 @@ import { formatCurrency } from '../lib/helpers';
 export default function CatalogueItem(props) {
   const calculateDiscountPercentage = () => {
     let discountPercentage = 0;
-    if (props.fullPrice) {
-      discountPercentage = Math.round((props.price / props.fullPrice) * 100);
+    if (props.discountPrice) {
+      discountPercentage = Math.round((props.discountPrice / props.normalPrice) * 100);
     }
 
-    return discountPercentage;
+    return 100 - discountPercentage;
   };
 
   return (
@@ -46,15 +46,21 @@ export default function CatalogueItem(props) {
           </Box>
 
           <Box>
-            {props.fullPrice ? (
-              <Text textDecor="line-through" fontSize="xs">
-                {formatCurrency(props.fullPrice)}
-              </Text>
-            ) : null}
-            <Text fontWeight="bold">
-              {formatCurrency(props.price)}{' '}
-              {props.fullPrice ? <Badge colorScheme="green">Diskon {calculateDiscountPercentage()}%</Badge> : null}
-            </Text>
+            {props.discountPrice ? (
+              <>
+                <Text textDecor="line-through" fontSize="xs">
+                  {formatCurrency(props.normalPrice)}
+                </Text>
+                <Text fontWeight="bold">
+                  {formatCurrency(props.discountPrice)}{' '}
+                  {props.discountPrice ? (
+                    <Badge colorScheme="green">Diskon {calculateDiscountPercentage()}%</Badge>
+                  ) : null}
+                </Text>
+              </>
+            ) : (
+              <Text fontWeight="bold">{formatCurrency(props.normalPrice)}</Text>
+            )}
           </Box>
         </VStack>
       </Stack>
